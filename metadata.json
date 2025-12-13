@@ -1,0 +1,7 @@
+{
+  "name": "J.A.R.V.I.S. Interface",
+  "description": "A fully functional Voice-to-Voice AI interface using Gemini Multimodal Live API to simulate J.A.R.V.I.S. Features real-time audio streaming and a reactive visual HUD.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

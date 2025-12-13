@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>J.A.R.V.I.S. Protocol</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary-cyan: #00f0ff;
+        --dark-bg: #050505;
+      }
+      
+      body {
+        font-family: 'Rajdhani', sans-serif;
+        background-color: var(--dark-bg);
+        color: var(--primary-cyan);
+      }
+
+      /* --- VFX: CRT & Scanlines --- */
+      .scanlines {
+        background: linear-gradient(
+          to bottom,
+          rgba(255,255,255,0),
+          rgba(255,255,255,0) 50%,
+          rgba(0,0,0,0.2) 50%,
+          rgba(0,0,0,0.2)
+        );
+        background-size: 100% 4px;
+        position: absolute;
+        inset: 0;
+        z-index: 50;
+        pointer-events: none;
+        animation: scanlineScroll 0.5s linear infinite;
+        opacity: 0.6;
+      }
+
+      .vignette {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle, rgba(0,0,0,0) 50%, rgba(0,0,0,0.9) 100%);
+        z-index: 40;
+        pointer-events: none;
+      }
+
+      /* --- VFX: 3D Perspective Grid --- */
+      .perspective-grid-container {
+        position: absolute;
+        inset: 0;
+        perspective: 1000px;
+        overflow: hidden;
+        z-index: 0;
+        pointer-events: none;
+      }
+      .perspective-grid {
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        left: -50%;
+        top: -50%;
+        background-image: 
+            linear-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 240, 255, 0.1) 1px, transparent 1px);
+        background-size: 40px 40px;
+        transform: rotateX(60deg) translateY(-100px) translateZ(-200px);
+        animation: gridScroll 20s linear infinite;
+        mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 40%, rgba(0,0,0,1) 100%);
+      }
+
+      @keyframes gridScroll {
+        0% { transform: rotateX(60deg) translateY(0) translateZ(-200px); }
+        100% { transform: rotateX(60deg) translateY(40px) translateZ(-200px); }
+      }
+
+      /* --- VFX: Glitch Text --- */
+      .glitch {
+        position: relative;
+        color: var(--primary-cyan);
+      }
+      .glitch::before,
+      .glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--dark-bg);
+      }
+      .glitch::before {
+        left: 2px;
+        text-shadow: -1px 0 #ff00c1;
+        clip: rect(44px, 450px, 56px, 0);
+        animation: glitch-anim 3s infinite linear alternate-reverse;
+      }
+      .glitch::after {
+        left: -2px;
+        text-shadow: -1px 0 #00fff9;
+        clip: rect(44px, 450px, 56px, 0);
+        animation: glitch-anim 2s infinite linear alternate-reverse;
+      }
+
+      @keyframes glitch-anim {
+        0% { clip: rect(61px, 9999px, 52px, 0); }
+        20% { clip: rect(33px, 9999px, 14px, 0); }
+        40% { clip: rect(96px, 9999px, 80px, 0); }
+        60% { clip: rect(10px, 9999px, 3px, 0); }
+        80% { clip: rect(55px, 9999px, 76px, 0); }
+        100% { clip: rect(2px, 9999px, 88px, 0); }
+      }
+
+      /* --- VFX: Glows & Animations --- */
+      .text-glow {
+        text-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+      }
+      
+      .box-glow {
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.1), inset 0 0 20px rgba(0, 240, 255, 0.05);
+      }
+
+      @keyframes spin-slow {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes spin-reverse-slow {
+        from { transform: rotate(360deg); }
+        to { transform: rotate(0deg); }
+      }
+
+      /* Startup Fade In */
+      @keyframes powerOn {
+        0% { opacity: 0; transform: scale(1.1); filter: blur(10px); }
+        50% { opacity: 0.5; transform: scale(1.02); filter: blur(2px); }
+        100% { opacity: 1; transform: scale(1); filter: blur(0); }
+      }
+      .animate-power-on {
+        animation: powerOn 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+      
+      .font-tech {
+        font-family: 'Share Tech Mono', monospace;
+      }
+
+      /* Scrollbar */
+      .terminal-scroll::-webkit-scrollbar { width: 6px; }
+      .terminal-scroll::-webkit-scrollbar-track { background: rgba(0, 240, 255, 0.05); }
+      .terminal-scroll::-webkit-scrollbar-thumb { background: rgba(0, 240, 255, 0.3); border-radius: 3px; }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-[#050505] text-cyan-400 overflow-hidden h-screen w-screen selection:bg-cyan-500/30">
+    <div id="root" class="h-full w-full"></div>
+    <div class="scanlines"></div>
+    <div class="vignette"></div>
+  </body>
+</html>
