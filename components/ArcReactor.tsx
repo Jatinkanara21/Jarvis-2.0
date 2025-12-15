@@ -31,7 +31,8 @@ export const ArcReactor: React.FC<ArcReactorProps> = ({ state, data }) => {
   }, []);
 
   return (
-    <div className="relative w-[380px] h-[380px] flex justify-center items-center">
+    /* Responsive Container: Scales with parent width/height */
+    <div className="relative w-[300px] h-[300px] sm:w-[340px] sm:h-[340px] lg:w-[380px] lg:h-[380px] flex justify-center items-center transition-all duration-300">
       
       {/* Background Hex Pattern (Static) */}
       <svg className="absolute inset-0 w-full h-full opacity-10 pointer-events-none animate-[spin_60s_linear_infinite]" viewBox="0 0 100 100">
@@ -81,15 +82,15 @@ export const ArcReactor: React.FC<ArcReactorProps> = ({ state, data }) => {
 
       {/* HUD Numbers Ring */}
       <div className="absolute inset-0 flex justify-center items-center pointer-events-none">
-          <div className="absolute top-8 font-tech text-[10px] text-cyan-500">{hudNumbers[0]}</div>
-          <div className="absolute bottom-8 font-tech text-[10px] text-cyan-500">{hudNumbers[1]}</div>
-          <div className="absolute left-8 font-tech text-[10px] text-cyan-500">{hudNumbers[2]}</div>
-          <div className="absolute right-8 font-tech text-[10px] text-cyan-500">{hudNumbers[3]}</div>
+          <div className="absolute top-[10%] font-tech text-[10px] text-cyan-500">{hudNumbers[0]}</div>
+          <div className="absolute bottom-[10%] font-tech text-[10px] text-cyan-500">{hudNumbers[1]}</div>
+          <div className="absolute left-[10%] font-tech text-[10px] text-cyan-500">{hudNumbers[2]}</div>
+          <div className="absolute right-[10%] font-tech text-[10px] text-cyan-500">{hudNumbers[3]}</div>
       </div>
 
-      {/* Rotating Mechanical Ring 1 (Mids) */}
+      {/* Rotating Mechanical Ring 1 (Mids) - 75% size */}
       <div 
-        className="absolute w-[280px] h-[280px] rounded-full border border-cyan-500/20"
+        className="absolute w-[75%] h-[75%] rounded-full border border-cyan-500/20"
         style={{ 
             animation: `spin-slow ${20 - (mid * 10)}s linear infinite`,
             boxShadow: `0 0 ${30 * volume}px ${glowColor}`
@@ -101,9 +102,9 @@ export const ArcReactor: React.FC<ArcReactorProps> = ({ state, data }) => {
         <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-current shadow-[0_0_10px_currentColor]" style={{color: mainColor}}></div>
       </div>
 
-      {/* Rotating Mechanical Ring 2 (Counter-Rotate) */}
+      {/* Rotating Mechanical Ring 2 (Counter-Rotate) - 65% size */}
       <div 
-        className="absolute w-[240px] h-[240px] rounded-full border-2 border-dashed border-cyan-500/20"
+        className="absolute w-[65%] h-[65%] rounded-full border-2 border-dashed border-cyan-500/20"
         style={{ 
             animation: `spin-reverse-slow ${15 - (bass * 5)}s linear infinite` 
         }}
@@ -115,9 +116,9 @@ export const ArcReactor: React.FC<ArcReactorProps> = ({ state, data }) => {
            </svg>
       </div>
 
-      {/* Inner Energy Ring (Treble Jitter) */}
+      {/* Inner Energy Ring (Treble Jitter) - 45% size */}
       <div 
-         className="absolute w-[180px] h-[180px] rounded-full border-t-2 border-b-2 border-transparent"
+         className="absolute w-[45%] h-[45%] rounded-full border-t-2 border-b-2 border-transparent"
          style={{
              borderColor: isConnected ? mainColor : 'rgba(21, 94, 117, 0.3)',
              borderLeftColor: 'transparent',
@@ -128,9 +129,9 @@ export const ArcReactor: React.FC<ArcReactorProps> = ({ state, data }) => {
          }}
       ></div>
 
-      {/* The Core */}
+      {/* The Core - 30% size */}
       <div 
-        className="absolute w-[120px] h-[120px] rounded-full flex justify-center items-center backdrop-blur-md border border-white/20"
+        className="absolute w-[30%] h-[30%] rounded-full flex justify-center items-center backdrop-blur-md border border-white/20"
         style={{
             background: `radial-gradient(circle, ${mainColor} 0%, transparent 80%)`,
             boxShadow: `0 0 ${40 + (volume * 60)}px ${mainColor}`,
@@ -148,7 +149,7 @@ export const ArcReactor: React.FC<ArcReactorProps> = ({ state, data }) => {
       </div>
       
       {/* Status Overlay */}
-      <div className="absolute bottom-[-50px] font-tech text-xs tracking-[0.3em] text-cyan-400/80 bg-black/50 px-3 py-1 border border-cyan-500/30 rounded">
+      <div className="absolute bottom-[-40px] font-tech text-[10px] sm:text-xs tracking-[0.3em] text-cyan-400/80 bg-black/50 px-3 py-1 border border-cyan-500/30 rounded whitespace-nowrap">
           {isError ? 'CRITICAL ERROR' : isConnecting ? 'SYNCING...' : isConnected ? 'SYSTEM ONLINE' : 'STANDBY MODE'}
       </div>
 
